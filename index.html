@@ -3,871 +3,814 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>i media</title>
     <style>
-        /* Global Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
         }
-
+        
         body {
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: #f0f2f5;
+            padding-top: 80px; /* Space for action bar */
         }
-
-        /* Login Container */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
-
-        .login-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 350px;
-            text-align: center;
-        }
-
-        .login-box h2 {
-            margin-bottom: 1.5rem;
-            color: #444;
-        }
-
-        .input-group {
-            margin-bottom: 1.2rem;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #555;
-        }
-
-        .input-group input {
+        
+        /* Action Bar */
+        .action-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 0.8rem;
-            background: linear-gradient(to right, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .login-btn:hover {
-            opacity: 0.9;
-        }
-
-        /* Dashboard Styles */
-        .dashboard {
-            min-height: 100vh;
-            display: none;
-            flex-direction: column;
-        }
-
-        header {
-            background: linear-gradient(to right, #667eea, #764ba2);
-            color: white;
-            padding: 1rem 2rem;
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
-        header h1 {
-            font-size: 1.5rem;
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1877f2;
         }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+        
+        .menu-btn {
+            background: none;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            font-size: 20px;
             cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
         }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .button-container {
-            display: flex;
+        
+        /* Circular Alert Dialog */
+        .alert-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            padding: 1.5rem;
-            background: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            padding: 30px;
         }
-
-        .feature-btn {
-            flex: 1;
-            min-width: 180px;
-            max-width: 220px;
-            padding: 1.2rem 0.5rem;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            color: white;
+        
+        .alert-dialog.show {
+            display: flex;
+        }
+        
+        .dialog-profile {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 3px solid #1877f2;
+        }
+        
+        .dialog-profile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .dialog-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .dialog-btn {
+            width: 120px;
+            padding: 10px;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 25px;
+            background-color: #1877f2;
+            color: white;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            font-size: 13px;
+            transition: all 0.3s;
         }
-
-        .feature-btn i {
-            font-size: 1.5rem;
+        
+        .dialog-btn:hover {
+            background-color: #1466d1;
+            transform: translateY(-2px);
         }
-
-        .feature-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        
+        .dialog-btn i {
+            font-size: 22px;
+            margin-bottom: 5px;
         }
-
-        .feature-btn[data-feature="websites"] {
-            background: linear-gradient(to right, #667eea, #764ba2);
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
         }
-
-        .feature-btn[data-feature="code-editor"] {
-            background: linear-gradient(to right, #43e97b, #38f9d7);
+        
+        .overlay.show {
+            display: block;
         }
-
-        .feature-btn[data-feature="apps"] {
-            background: linear-gradient(to right, #ff758c, #ff7eb3);
+        
+        /* Posts Section */
+        .posts-section {
+            margin-top: 20px;
         }
-
-        .feature-btn[data-feature="files"] {
-            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+        
+        .post-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
-        .feature-btn[data-feature="empty"] {
-            background: linear-gradient(to right, #a18cd1, #fbc2eb);
-        }
-
-        .content-area {
-            flex: 1;
-            padding: 2rem;
-            background: #f9f9f9;
-        }
-
-        .welcome-message {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .welcome-message h2 {
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-
-        .welcome-message p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* Feature Content Styles */
-        .feature-content {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .feature-content h3 {
-            color: #444;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        /* Websites Feature */
-        .website-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .website-card {
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 1rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .website-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .website-name {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #444;
-        }
-
-        .website-url {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            word-break: break-all;
-        }
-
-        .website-actions {
+        
+        .post-header {
             display: flex;
-            gap: 0.5rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
-
-        .action-btn {
-            flex: 1;
-            padding: 0.5rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.3s;
+        
+        .profile-info {
+            display: flex;
+            align-items: center;
         }
-
-        .action-btn:hover {
-            opacity: 0.9;
-        }
-
-        .copy-btn {
-            background: #4facfe;
-            color: white;
-        }
-
-        .open-btn {
-            background: #43e97b;
-            color: white;
-        }
-
-        /* Code Editor Feature */
-        .code-editor-container {
+        
+        .profile-details {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
         }
-
-        .code-editor {
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 10px;
             overflow: hidden;
         }
-
-        .editor-header {
-            background: #f5f5f5;
-            padding: 0.5rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .editor-title {
-            font-weight: 600;
-            color: #444;
-        }
-
-        .editor-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .editor-textarea {
+        
+        .profile-pic img {
             width: 100%;
-            min-height: 200px;
-            padding: 1rem;
-            border: none;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.9rem;
-            resize: vertical;
-            background: #fafafa;
-        }
-
-        .editor-textarea:focus {
-            outline: none;
-        }
-
-        /* Apps Feature */
-        .apps-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .app-card {
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .app-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .app-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+            height: 100%;
             object-fit: cover;
-            background: #f5f5f5;
+        }
+        
+        .profile-name {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .post-date {
+            font-size: 12px;
+            color: #65676b;
+        }
+        
+        .follow-btn {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .post-content {
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: #666;
-        }
-
-        .app-name {
-            font-weight: 600;
-            color: #444;
-            text-align: center;
-        }
-
-        .download-apk {
-            width: 100%;
-            padding: 0.5rem;
-            background: #ff758c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .download-apk:hover {
-            opacity: 0.9;
-        }
-
-        /* Files Feature */
-        .files-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .file-card {
-            border: 1px solid #eee;
+            margin-bottom: 15px;
             border-radius: 8px;
-            padding: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .custom-post {
+            width: 100%;
+            height: 100%;
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .file-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .file-icon {
-            font-size: 2rem;
-            color: #4facfe;
-            text-align: center;
-        }
-
-        .file-name {
-            font-weight: 600;
-            color: #444;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             text-align: center;
             word-break: break-word;
         }
-
-        .download-file {
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .post-action {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        
+        .post-action:hover {
+            background-color: #f0f2f5;
+        }
+        
+        /* Full Screen Post Creator */
+        .post-creator {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 0.5rem;
-            background: #a18cd1;
+            height: 100%;
+            background-color: white;
+            z-index: 1002;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .creator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .creator-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .close-creator {
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .customization-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .option-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .option-btn.active {
+            background-color: #1877f2;
+            color: white;
+            border-color: #1877f2;
+        }
+        
+        .color-picker {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .font-size-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .font-size-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .post-editor {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .post-preview {
+            flex-grow: 1;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            background-color: #f0f2f5;
+        }
+        
+        .preview-content {
+            width: 100%;
+            height: 100%;
+            max-width: 400px;
+            max-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            word-break: break-word;
+            text-align: center;
+        }
+        
+        .post-input {
+            width: 100%;
+            height: 100px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: none;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .publish-btn {
+            background-color: #1877f2;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: opacity 0.3s;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
-
-        .download-file:hover {
-            opacity: 0.9;
-        }
-
-        /* Empty Feature */
-        .empty-feature {
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .empty-feature i {
-            font-size: 3rem;
-            color: #a18cd1;
-            margin-bottom: 1rem;
-        }
-
-        .empty-feature h3 {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-        .empty-feature p {
-            color: #999;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .login-box {
-                width: 90%;
-                max-width: 350px;
-            }
-            
-            .button-container {
-                padding: 1rem;
-            }
         
-            .feature-btn {
-                min-width: 150px;
-                padding: 1rem 0.5rem;
-            }
-            
-            .content-area {
-                padding: 1rem;
-            }
-            
-            .website-list, .apps-list, .files-list {
-                grid-template-columns: 1fr;
-            }
+        .publish-btn:hover {
+            background-color: #1466d1;
+        }
+        
+        /* Background Colors */
+        .bg-blue {
+            background-color: #e7f3ff;
+        }
+        
+        .bg-green {
+            background-color: #e6f7ee;
+        }
+        
+        .bg-yellow {
+            background-color: #fff8e6;
+        }
+        
+        .bg-pink {
+            background-color: #fce8f1;
+        }
+        
+        /* Text Colors */
+        .text-dark {
+            color: #1d1d1d;
+        }
+        
+        .text-blue {
+            color: #1877f2;
+        }
+        
+        .text-red {
+            color: #f02849;
+        }
+        
+        .text-green {
+            color: #42b72a;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="login-container" id="login-container">
-        <div class="login-box">
-            <h2>Login</h2>
-            <form id="login-form">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required>
-                </div>
-                <button type="submit" class="login-btn">Login</button>
-            </form>
-        </div>
+    <!-- Action Bar (Fixed at Top) -->
+    <div class="action-bar">
+        <div class="logo">i media</div>
+        <button class="menu-btn">☰</button>
     </div>
 
-    <div class="dashboard" id="dashboard">
-        <header>
-            <h1>Admin Dashboard</h1>
-            <button id="logout-btn" class="logout-btn">Logout <i class="fas fa-sign-out-alt"></i></button>
-        </header>
-        
-        <div class="button-container">
-            <button class="feature-btn" data-feature="websites">
-                <i class="fas fa-globe"></i> Websites
-            </button>
-            <button class="feature-btn" data-feature="code-editor">
-                <i class="fas fa-code"></i> Code Editor
-            </button>
-            <button class="feature-btn" data-feature="apps">
-                <i class="fas fa-mobile-alt"></i> Apps
-            </button>
-            <button class="feature-btn" data-feature="files">
-                <i class="fas fa-file-download"></i> Files
-            </button>
-            <button class="feature-btn" data-feature="empty">
-                <i class="fas fa-plus"></i> Empty
-            </button>
-        </div>
-
-        <div class="content-area" id="content-area">
-            <div class="welcome-message">
-                <h2>Welcome to Admin Dashboard</h2>
-                <p>Please select a feature from the buttons above</p>
+    <div class="container">
+        <div class="posts-section">
+            <div class="post-container">
+                <div class="post-header">
+                    <div class="profile-info">
+                        <div class="profile-pic">
+                            <img src="https://via.placeholder.com/50" alt="Profile Picture">
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-name">ইউজার নাম</div>
+                            <div class="post-date">July 15, 2023</div>
+                        </div>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                <div class="post-content bg-blue">
+                    <div class="custom-post text-dark" style="font-size: 18px;">
+                        এই পোস্টের কন্টেন্ট...
+                    </div>
+                </div>
+                <div class="post-actions">
+                    <div class="post-action">👍 Like</div>
+                    <div class="post-action">💬 Comment</div>
+                    <div class="post-action">🔄 Share</div>
+                </div>
+            </div>
+            
+            <div class="post-container">
+                <div class="post-header">
+                    <div class="profile-info">
+                        <div class="profile-pic">
+                            <img src="https://via.placeholder.com/50" alt="Profile Picture">
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-name">অন্য ইউজার</div>
+                            <div class="post-date">July 14, 2023</div>
+                        </div>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                <div class="post-content bg-green">
+                    <div class="custom-post text-green" style="font-size: 22px;">
+                        আরেকটি পোস্ট...
+                    </div>
+                </div>
+                <div class="post-actions">
+                    <div class="post-action">👍 Like</div>
+                    <div class="post-action">💬 Comment</div>
+                    <div class="post-action">🔄 Share</div>
+                </div>
             </div>
         </div>
     </div>
-
+    
+    <!-- Circular Alert Dialog -->
+    <div class="overlay" id="overlay"></div>
+    <div class="alert-dialog" id="alertDialog">
+        <div class="dialog-profile">
+            <img src="https://via.placeholder.com/120" alt="Profile Picture">
+        </div>
+        <div class="dialog-buttons">
+            <button class="dialog-btn" id="createPostBtn">
+                <i class="fas fa-plus"></i>
+                Create Post
+            </button>
+            <button class="dialog-btn" id="searchBtn">
+                <i class="fas fa-search"></i>
+                Search
+            </button>
+            <button class="dialog-btn" id="videoBtn">
+                <i class="fas fa-video"></i>
+                Video
+            </button>
+            <button class="dialog-btn" id="settingsBtn">
+                <i class="fas fa-cog"></i>
+                Settings
+            </button>
+        </div>
+    </div>
+    
+    <!-- Full Screen Post Creator -->
+    <div class="post-creator" id="postCreator">
+        <div class="creator-header">
+            <div class="creator-title">Create New Post</div>
+            <div class="close-creator">&times;</div>
+        </div>
+        
+        <div class="customization-options">
+            <div class="font-size-controls">
+                <button class="font-size-btn" id="decreaseFont">A-</button>
+                <button class="font-size-btn" id="increaseFont">A+</button>
+            </div>
+            
+            <button class="option-btn" id="boldBtn">
+                <i class="fas fa-bold"></i>
+            </button>
+            <button class="option-btn" id="italicBtn">
+                <i class="fas fa-italic"></i>
+            </button>
+            
+            <div class="color-picker" style="background-color: #e7f3ff;" data-bg="bg-blue"></div>
+            <div class="color-picker" style="background-color: #e6f7ee;" data-bg="bg-green"></div>
+            <div class="color-picker" style="background-color: #fff8e6;" data-bg="bg-yellow"></div>
+            <div class="color-picker" style="background-color: #fce8f1;" data-bg="bg-pink"></div>
+            
+            <button class="option-btn" data-color="text-dark">Dark</button>
+            <button class="option-btn" data-color="text-blue">Blue</button>
+            <button class="option-btn" data-color="text-red">Red</button>
+            <button class="option-btn" data-color="text-green">Green</button>
+        </div>
+        
+        <div class="post-editor">
+            <textarea class="post-input" id="postTextInput" placeholder="What's on your mind?"></textarea>
+            
+            <div class="post-preview">
+                <div class="preview-content" id="postPreview">
+                    Your post will appear here
+                </div>
+            </div>
+            
+            <button class="publish-btn" id="publishBtn">Publish</button>
+        </div>
+    </div>
+    
     <script>
-        // Data Storage
-        const data = {
-            users: [
-                { username: "12", password: "12" },
-                { username: "12", password: "12" }
-            ],
-            websites: [
-                { name: "Google", url: "https://www.google.com" },
-                { name: "Facebook", url: "https://www.facebook.com" },
-                { name: "YouTube", url: "https://www.youtube.com" }
-            ],
-            codeSnippets: {
-                html: "<!-- Enter your HTML code here -->\n<div>\n  <h1>Hello World!</h1>\n</div>",
-                css: "/* Enter your CSS code here */\nbody {\n  font-family: Arial, sans-serif;\n  margin: 0;\n  padding: 0;\n}",
-                js: "// Enter your JavaScript code here\nfunction hello() {\n  alert('Hello World!');\n}"
-            },
-            apps: [
-                { name: "Weather App", logo: "☀️" },
-                { name: "Calculator", logo: "🧮" },
-                { name: "Notes App", logo: "📝" }
-            ],
-            files: [
-                { name: "HTML Template", type: "html" },
-                { name: "CSS Stylesheet", type: "css" },
-                { name: "JavaScript File", type: "js" },
-                { name: "Theme Pack", type: "zip" },
-                { name: "Documentation", type: "pdf" }
-            ]
-        };
-
-        // DOM Elements
-        const loginContainer = document.getElementById('login-container');
-        const dashboard = document.getElementById('dashboard');
-        const loginForm = document.getElementById('login-form');
-        const logoutBtn = document.getElementById('logout-btn');
-        const contentArea = document.getElementById('content-area');
-        const featureBtns = document.querySelectorAll('.feature-btn');
-
-        // Initialize
-        dashboard.style.display = 'none';
-
-        // Login Functionality
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Check credentials
-            const user = data.users.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                // Successful login
-                loginContainer.style.display = 'none';
-                dashboard.style.display = 'flex';
-                showWelcomeMessage();
-            } else {
-                alert('Invalid username or password');
+        // Menu button functionality
+        const menuBtn = document.querySelector('.menu-btn');
+        const alertDialog = document.getElementById('alertDialog');
+        const overlay = document.getElementById('overlay');
+        
+        menuBtn.addEventListener('click', () => {
+            alertDialog.classList.add('show');
+            overlay.classList.add('show');
+        });
+        
+        // Close dialog when clicking overlay
+        overlay.addEventListener('click', () => {
+            alertDialog.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+        
+        // Dialog buttons functionality
+        const createPostBtn = document.getElementById('createPostBtn');
+        const searchBtn = document.getElementById('searchBtn');
+        const videoBtn = document.getElementById('videoBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        
+        const postCreator = document.getElementById('postCreator');
+        const closeCreator = document.querySelector('.close-creator');
+        const publishBtn = document.getElementById('publishBtn');
+        const postTextInput = document.getElementById('postTextInput');
+        const postPreview = document.getElementById('postPreview');
+        const postsSection = document.querySelector('.posts-section');
+        
+        // Post customization elements
+        const decreaseFont = document.getElementById('decreaseFont');
+        const increaseFont = document.getElementById('increaseFont');
+        const boldBtn = document.getElementById('boldBtn');
+        const italicBtn = document.getElementById('italicBtn');
+        const colorPickers = document.querySelectorAll('.color-picker');
+        const textColorBtns = document.querySelectorAll('[data-color]');
+        
+        createPostBtn.addEventListener('click', () => {
+            alertDialog.classList.remove('show');
+            overlay.classList.remove('show');
+            postCreator.style.display = 'flex';
+        });
+        
+        searchBtn.addEventListener('click', () => {
+            alert('Search functionality will be implemented here!');
+            alertDialog.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+        
+        videoBtn.addEventListener('click', () => {
+            alert('Video functionality will be implemented here!');
+            alertDialog.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+        
+        settingsBtn.addEventListener('click', () => {
+            alert('Settings panel will be implemented here!');
+            alertDialog.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+        
+        closeCreator.addEventListener('click', () => {
+            postCreator.style.display = 'none';
+        });
+        
+        // Update preview as user types
+        postTextInput.addEventListener('input', () => {
+            postPreview.textContent = postTextInput.value || 'Your post will appear here';
+        });
+        
+        // Font size controls
+        let currentFontSize = 18;
+        
+        decreaseFont.addEventListener('click', () => {
+            if (currentFontSize > 12) {
+                currentFontSize -= 2;
+                updatePreviewStyles();
             }
         });
-
-        // Logout Functionality
-        logoutBtn.addEventListener('click', function() {
-            dashboard.style.display = 'none';
-            loginContainer.style.display = 'flex';
-            document.getElementById('login-form').reset();
+        
+        increaseFont.addEventListener('click', () => {
+            if (currentFontSize < 36) {
+                currentFontSize += 2;
+                updatePreviewStyles();
+            }
         });
-
-        // Feature Buttons Functionality
-        featureBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const feature = this.getAttribute('data-feature');
-                showFeatureContent(feature);
+        
+        // Text styling
+        let isBold = false;
+        let isItalic = false;
+        
+        boldBtn.addEventListener('click', () => {
+            isBold = !isBold;
+            boldBtn.classList.toggle('active');
+            updatePreviewStyles();
+        });
+        
+        italicBtn.addEventListener('click', () => {
+            isItalic = !isItalic;
+            italicBtn.classList.toggle('active');
+            updatePreviewStyles();
+        });
+        
+        // Background color pickers
+        let currentBgClass = 'bg-blue';
+        
+        colorPickers.forEach(picker => {
+            picker.addEventListener('click', () => {
+                document.querySelector('.post-preview').classList.remove(currentBgClass);
+                currentBgClass = picker.getAttribute('data-bg');
+                document.querySelector('.post-preview').classList.add(currentBgClass);
             });
         });
-
-        // Show Welcome Message
-        function showWelcomeMessage() {
-            contentArea.innerHTML = `
-                <div class="welcome-message">
-                    <h2>Welcome to Admin Dashboard</h2>
-                    <p>Please select a feature from the buttons above</p>
-                </div>
-            `;
-        }
-
-        // Show Feature Content
-        function showFeatureContent(feature) {
-            let content = '';
-            
-            switch(feature) {
-                case 'websites':
-                    content = showWebsites();
-                    break;
-                case 'code-editor':
-                    content = showCodeEditor();
-                    break;
-                case 'apps':
-                    content = showApps();
-                    break;
-                case 'files':
-                    content = showFiles();
-                    break;
-                case 'empty':
-                    content = showEmptyFeature();
-                    break;
-                default:
-                    content = showWelcomeMessage();
-            }
-            
-            contentArea.innerHTML = content;
-            
-            // Add event listeners for dynamic elements
-            if (feature === 'websites') {
-                document.querySelectorAll('.copy-btn').forEach(btn => {
-                    btn.addEventListener('click', copyToClipboard);
-                });
+        
+        // Text color buttons
+        let currentTextClass = 'text-dark';
+        
+        textColorBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                postPreview.classList.remove(currentTextClass);
+                currentTextClass = btn.getAttribute('data-color');
+                postPreview.classList.add(currentTextClass);
                 
-                document.querySelectorAll('.open-btn').forEach(btn => {
-                    btn.addEventListener('click', openWebsite);
-                });
-            }
-            
-            if (feature === 'code-editor') {
-                document.getElementById('copy-html').addEventListener('click', () => copyCode('html'));
-                document.getElementById('copy-css').addEventListener('click', () => copyCode('css'));
-                document.getElementById('copy-js').addEventListener('click', () => copyCode('js'));
-                
-                document.getElementById('download-html').addEventListener('click', () => downloadCode('html'));
-                document.getElementById('download-css').addEventListener('click', () => downloadCode('css'));
-                document.getElementById('download-js').addEventListener('click', () => downloadCode('js'));
-                
-                document.getElementById('html-code').addEventListener('input', updateCode);
-                document.getElementById('css-code').addEventListener('input', updateCode);
-                document.getElementById('js-code').addEventListener('input', updateCode);
-            }
-            
-            if (feature === 'apps') {
-                document.querySelectorAll('.download-apk').forEach(btn => {
-                    btn.addEventListener('click', downloadApk);
-                });
-            }
-            
-            if (feature === 'files') {
-                document.querySelectorAll('.download-file').forEach(btn => {
-                    btn.addEventListener('click', downloadFile);
-                });
-            }
+                // Update active state
+                textColorBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+        
+        // Update preview styles
+        function updatePreviewStyles() {
+            postPreview.style.fontSize = `${currentFontSize}px`;
+            postPreview.style.fontWeight = isBold ? 'bold' : 'normal';
+            postPreview.style.fontStyle = isItalic ? 'italic' : 'normal';
         }
-
-        // Websites Feature
-        function showWebsites() {
-            let websitesHTML = data.websites.map(website => `
-                <div class="website-card">
-                    <div class="website-name">${website.name}</div>
-                    <div class="website-url">${website.url}</div>
-                    <div class="website-actions">
-                        <button class="action-btn copy-btn" data-url="${website.url}">Copy</button>
-                        <button class="action-btn open-btn" data-url="${website.url}">Open</button>
-                    </div>
-                </div>
-            `).join('');
+        
+        // Publish new post
+        publishBtn.addEventListener('click', () => {
+            const postText = postTextInput.value.trim();
+            if (postText) {
+                createNewPost(postText);
+                resetPostCreator();
+                postCreator.style.display = 'none';
+            }
+        });
+        
+        // Function to reset post creator
+        function resetPostCreator() {
+            postTextInput.value = '';
+            postPreview.textContent = 'Your post will appear here';
+            currentFontSize = 18;
+            isBold = false;
+            isItalic = false;
+            currentBgClass = 'bg-blue';
+            currentTextClass = 'text-dark';
             
-            return `
-                <div class="feature-content">
-                    <h3>Website Links</h3>
-                    <div class="website-list">
-                        ${websitesHTML}
-                    </div>
-                </div>
-            `;
+            // Reset UI
+            document.querySelector('.post-preview').className = 'post-preview';
+            document.querySelector('.post-preview').classList.add('bg-blue');
+            postPreview.className = 'preview-content';
+            postPreview.classList.add('text-dark');
+            
+            boldBtn.classList.remove('active');
+            italicBtn.classList.remove('active');
+            textColorBtns.forEach(btn => btn.classList.remove('active'));
+            textColorBtns[0].classList.add('active');
+            
+            updatePreviewStyles();
         }
-
-        // Code Editor Feature
-        function showCodeEditor() {
-            return `
-                <div class="feature-content">
-                    <h3>Code Editor</h3>
-                    <div class="code-editor-container">
-                        <div class="code-editor">
-                            <div class="editor-header">
-                                <div class="editor-title">HTML</div>
-                                <div class="editor-actions">
-                                    <button class="action-btn copy-btn" id="copy-html">Copy</button>
-                                    <button class="action-btn download-btn" id="download-html">Download</button>
-                                </div>
-                            </div>
-                            <textarea class="editor-textarea" id="html-code">${data.codeSnippets.html}</textarea>
+        
+        // Function to create new post
+        function createNewPost(text) {
+            const postContainer = document.createElement('div');
+            postContainer.className = 'post-container';
+            
+            const currentDate = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = currentDate.toLocaleDateString('en-US', options);
+            
+            postContainer.innerHTML = `
+                <div class="post-header">
+                    <div class="profile-info">
+                        <div class="profile-pic">
+                            <img src="https://via.placeholder.com/50" alt="Profile Picture">
                         </div>
-                        
-                        <div class="code-editor">
-                            <div class="editor-header">
-                                <div class="editor-title">CSS</div>
-                                <div class="editor-actions">
-                                    <button class="action-btn copy-btn" id="copy-css">Copy</button>
-                                    <button class="action-btn download-btn" id="download-css">Download</button>
-                                </div>
-                            </div>
-                            <textarea class="editor-textarea" id="css-code">${data.codeSnippets.css}</textarea>
-                        </div>
-                        
-                        <div class="code-editor">
-                            <div class="editor-header">
-                                <div class="editor-title">JavaScript</div>
-                                <div class="editor-actions">
-                                    <button class="action-btn copy-btn" id="copy-js">Copy</button>
-                                    <button class="action-btn download-btn" id="download-js">Download</button>
-                                </div>
-                            </div>
-                            <textarea class="editor-textarea" id="js-code">${data.codeSnippets.js}</textarea>
+                        <div class="profile-details">
+                            <div class="profile-name">আপনি</div>
+                            <div class="post-date">${formattedDate}</div>
                         </div>
                     </div>
+                    <button class="follow-btn">Following</button>
                 </div>
-            `;
-        }
-
-        // Apps Feature
-        function showApps() {
-            let appsHTML = data.apps.map(app => `
-                <div class="app-card">
-                    <div class="app-logo">${app.logo}</div>
-                    <div class="app-name">${app.name}</div>
-                    <button class="download-apk">Download APK</button>
-                </div>
-            `).join('');
-            
-            return `
-                <div class="feature-content">
-                    <h3>Apps</h3>
-                    <div class="apps-list">
-                        ${appsHTML}
+                <div class="post-content ${currentBgClass}">
+                    <div class="custom-post ${currentTextClass}" style="font-size: ${currentFontSize}px; font-weight: ${isBold ? 'bold' : 'normal'}; font-style: ${isItalic ? 'italic' : 'normal'}">
+                        ${text}
                     </div>
                 </div>
-            `;
-        }
-
-        // Files Feature
-        function showFiles() {
-            let filesHTML = data.files.map(file => `
-                <div class="file-card">
-                    <div class="file-icon">${getFileIcon(file.type)}</div>
-                    <div class="file-name">${file.name}</div>
-                    <button class="download-file">Download</button>
+                <div class="post-actions">
+                    <div class="post-action">👍 Like</div>
+                    <div class="post-action">💬 Comment</div>
+                    <div class="post-action">🔄 Share</div>
                 </div>
-            `).join('');
+            `;
             
-            return `
-                <div class="feature-content">
-                    <h3>Files</h3>
-                    <div class="files-list">
-                        ${filesHTML}
+            postsSection.insertBefore(postContainer, postsSection.firstChild);
+        }
+        
+        // Add some sample posts on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const samplePosts = [
+                { text: "আজকে আমি আমার নতুন প্রজেক্ট শেষ করেছি!", bg: "bg-blue", color: "text-dark", size: 18 },
+                { text: "সবাইকে ঈদ মোবারক!", bg: "bg-green", color: "text-green", size: 22 },
+                { text: "এই সুন্দর সকালে সবাইকে শুভেচ্ছা", bg: "bg-yellow", color: "text-dark", size: 20 },
+                { text: "আমার নতুন ছবি দেখুন", bg: "bg-pink", color: "text-red", size: 24 }
+            ];
+            
+            samplePosts.forEach(post => {
+                const currentDate = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = currentDate.toLocaleDateString('en-US', options);
+                
+                const postContainer = document.createElement('div');
+                postContainer.className = 'post-container';
+                
+                postContainer.innerHTML = `
+                    <div class="post-header">
+                        <div class="profile-info">
+                            <div class="profile-pic">
+                                <img src="https://via.placeholder.com/50" alt="Profile Picture">
+                            </div>
+                            <div class="profile-details">
+                                <div class="profile-name">ইউজার ${Math.floor(Math.random() * 10) + 1}</div>
+                                <div class="post-date">${formattedDate}</div>
+                            </div>
+                        </div>
+                        <button class="follow-btn">Follow</button>
                     </div>
-                </div>
-            `;
-        }
-
-        // Empty Feature
-        function showEmptyFeature() {
-            return `
-                <div class="feature-content empty-feature">
-                    <i class="fas fa-plus-circle"></i>
-                    <h3>Empty Feature</h3>
-                    <p>This feature is currently empty. You can add content later.</p>
-                </div>
-            `;
-        }
-
-        // Helper Functions
-        function getFileIcon(type) {
-            const icons = {
-                html: '<i class="fab fa-html5"></i>',
-                css: '<i class="fab fa-css3-alt"></i>',
-                js: '<i class="fab fa-js-square"></i>',
-                zip: '<i class="fas fa-file-archive"></i>',
-                pdf: '<i class="fas fa-file-pdf"></i>'
-            };
-            return icons[type] || '<i class="fas fa-file"></i>';
-        }
-
-        function copyToClipboard(e) {
-            const url = e.target.getAttribute('data-url');
-            navigator.clipboard.writeText(url)
-                .then(() => {
-                    alert('URL copied to clipboard!');
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
-        }
-
-        function openWebsite(e) {
-            const url = e.target.getAttribute('data-url');
-            window.open(url, '_blank');
-        }
-
-        function copyCode(type) {
-            const code = document.getElementById(`${type}-code`).value;
-            navigator.clipboard.writeText(code)
-                .then(() => {
-                    alert(`${type.toUpperCase()} code copied to clipboard!`);
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
-        }
-
-        function downloadCode(type) {
-            const code = document.getElementById(`${type}-code`).value;
-            const blob = new Blob([code], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `code.${type}`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function updateCode() {
-            data.codeSnippets.html = document.getElementById('html-code').value;
-            data.codeSnippets.css = document.getElementById('css-code').value;
-            data.codeSnippets.js = document.getElementById('js-code').value;
-        }
-
-        function downloadApk() {
-            alert('APK download started (simulated)');
-        }
-
-        function downloadFile() {
-            alert('File download started (simulated)');
-        }
+                    <div class="post-content ${post.bg}">
+                        <div class="custom-post ${post.color}" style="font-size: ${post.size}px">
+                            ${post.text}
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-action">👍 Like</div>
+                        <div class="post-action">💬 Comment</div>
+                        <div class="post-action">🔄 Share</div>
+                    </div>
+                `;
+                
+                postsSection.appendChild(postContainer);
+            });
+        });
     </script>
 </body>
 </html>
